@@ -66,9 +66,8 @@ class Video {
 		const source = document.createElement('source');
 		this.video.appendChild(source);
 		source.src = this.source;
-
-		this.video.loop  = true;
-		this.video.muted = true;
+		this.video.poster = settings.paths.poster;
+		this.video.loop = true;
 	}
 
 	play(position) {
@@ -82,16 +81,20 @@ class Video {
 }
 
 const settings = {
-	paths : [
-		'25004936_496318364071693_8757687119704489984_n.mp4',
-		'25028375_1935891253118370_7867467903937806336_n.mp4',
-		'26881144_779335842252297_560437019596029952_n.mp4',
-		'27063132_154915628500991_975729841376591872_n.mp4',
-		'27531178_2031479350463132_2907359690188914688_n.mp4',
-		'27679305_152723948855490_457664791574478848_n.mp4',
-		'29002521_1687530844640841_8282464596313243648_n.mp4',
-		'30040565_218742602040378_1773007807398805504_n.mp4',
-	],
+	paths : {
+		videos : [
+			'25004936_496318364071693_8757687119704489984_n.mp4',
+			'25028375_1935891253118370_7867467903937806336_n.mp4',
+			'26881144_779335842252297_560437019596029952_n.mp4',
+			'27063132_154915628500991_975729841376591872_n.mp4',
+			'27531178_2031479350463132_2907359690188914688_n.mp4',
+			'27679305_152723948855490_457664791574478848_n.mp4',
+			'29002521_1687530844640841_8282464596313243648_n.mp4',
+			'30040565_218742602040378_1773007807398805504_n.mp4',
+		],
+
+		poster : 'DSC_9544.jpg',
+	},
 
 	zIndex : {
 		value : {
@@ -189,7 +192,7 @@ const f = {
 };
 
 f.createVideos = () => {
-	settings.videos = settings.paths.map(path => {
+	settings.videos = settings.paths.videos.map(path => {
 		const video = new Video(path);
 		video.createVideo();
 		return video;
