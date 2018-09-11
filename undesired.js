@@ -66,8 +66,10 @@ class Video {
 		const source = document.createElement('source');
 		this.video.appendChild(source);
 		source.src = this.source;
+
 		this.video.poster = settings.paths.poster;
-		this.video.loop = true;
+		this.video.loop   = true;
+		this.video.muted  = true;
 	}
 
 	play(position) {
