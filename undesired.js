@@ -138,8 +138,8 @@ const settings = {
 			},
 
 			contrast : {
-				min : 100,
-				max : 200,
+				min :  100,
+				max : 1000,
 			},
 
 			hueRotate : {
@@ -148,8 +148,8 @@ const settings = {
 			},
 
 			saturate : {
-				min :   100,
-				max : 10000,
+				min :  100,
+				max : 1000,
 			},
 
 			opacity : {
