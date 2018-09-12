@@ -15,18 +15,6 @@ class Video {
 			},
 		};
 
-		this.blendMode = {
-			randomize : () => this.blendMode.value = f.randomItem(settings.video.blendMode.list),
-			update    : () => this.video.style.mixBlendMode = this.blendMode.value,
-			cycle     : () => {
-				this.blendMode.randomize();
-				this.blendMode.update();
-
-				const delay = f.randomIntegerInclusive(settings.video.blendMode.delay.min, settings.video.blendMode.delay.max);
-				setTimeout(this.blendMode.cycle, delay);
-			},
-		};
-
 		this.opacity = {
 			randomize : () => this.opacity.value = f.randomIntegerInclusive(settings.video.opacity.min, settings.video.opacity.max),
 			update    : () => this.video.style.opacity = this.opacity.value,
@@ -36,6 +24,18 @@ class Video {
 
 				const delay = f.randomIntegerInclusive(settings.video.opacity.delay.min, settings.video.opacity.delay.max);
 				setTimeout(this.opacity.cycle, delay);
+			},
+		};
+
+		this.blendMode = {
+			randomize : () => this.blendMode.value = f.randomItem(settings.video.blendMode.list),
+			update    : () => this.video.style.mixBlendMode = this.blendMode.value,
+			cycle     : () => {
+				this.blendMode.randomize();
+				this.blendMode.update();
+
+				const delay = f.randomIntegerInclusive(settings.video.blendMode.delay.min, settings.video.blendMode.delay.max);
+				setTimeout(this.blendMode.cycle, delay);
 			},
 		};
 
@@ -83,8 +83,8 @@ class Video {
 		this.video.autoplay = true;
 
 		this.zIndex.cycle();
-		this.blendMode.cycle();
 		this.opacity.cycle();
+		this.blendMode.cycle();
 	}
 }
 
@@ -106,8 +106,18 @@ const settings = {
 			max : 63,
 
 			delay : {
-				min :  1000,
-				max : 10000,
+				min :  8000,
+				max : 16000,
+			},
+		},
+
+		opacity : {
+			min :  0,
+			max : 50,
+
+			delay : {
+				min :  8000,
+				max : 16000,
 			},
 		},
 
@@ -131,18 +141,8 @@ const settings = {
 			],
 
 			delay : {
-				min :  1000,
-				max : 10000,
-			},
-		},
-
-		opacity : {
-			min :  0,
-			max : 50,
-
-			delay : {
-				min :  1000,
-				max : 10000,
+				min :  8000,
+				max : 16000,
 			},
 		},
 
@@ -168,8 +168,8 @@ const settings = {
 			},
 
 			delay : {
-				min :  1000,
-				max : 10000,
+				min :  8000,
+				max : 16000,
 			},
 		},
 	},
@@ -197,8 +197,8 @@ const settings = {
 			},
 
 			delay : {
-				min :  1000,
-				max : 10000,
+				min :  8000,
+				max : 16000,
 			},
 		},
 	},
