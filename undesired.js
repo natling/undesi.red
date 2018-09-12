@@ -4,37 +4,37 @@ class Video {
 		this.source = source;
 
 		this.zIndex = {
-			randomize : () => this.zIndex.value = f.randomIntegerInclusive(settings.zIndex.value.min, settings.zIndex.value.max),
+			randomize : () => this.zIndex.value = f.randomIntegerInclusive(settings.video.zIndex.min, settings.video.zIndex.max),
 			update    : () => this.video.style.zIndex = this.zIndex.value,
 			cycle     : () => {
 				this.zIndex.randomize();
 				this.zIndex.update();
 
-				const delay = f.randomIntegerInclusive(settings.zIndex.delay.min, settings.zIndex.delay.max);
+				const delay = f.randomIntegerInclusive(settings.video.zIndex.delay.min, settings.video.zIndex.delay.max);
 				setTimeout(this.zIndex.cycle, delay);
 			},
 		};
 
 		this.blendMode = {
-			randomize : () => this.blendMode.value = f.randomItem(settings.blendMode.value),
+			randomize : () => this.blendMode.value = f.randomItem(settings.video.blendMode.list),
 			update    : () => this.video.style.mixBlendMode = this.blendMode.value,
 			cycle     : () => {
 				this.blendMode.randomize();
 				this.blendMode.update();
 
-				const delay = f.randomIntegerInclusive(settings.blendMode.delay.min, settings.blendMode.delay.max);
+				const delay = f.randomIntegerInclusive(settings.video.blendMode.delay.min, settings.video.blendMode.delay.max);
 				setTimeout(this.blendMode.cycle, delay);
 			},
 		};
 
 		this.opacity = {
-			randomize : () => this.opacity.value = f.randomIntegerInclusive(settings.opacity.value.min, settings.opacity.value.max),
+			randomize : () => this.opacity.value = f.randomIntegerInclusive(settings.video.opacity.min, settings.video.opacity.max),
 			update    : () => this.video.style.opacity = this.opacity.value,
 			cycle     : () => {
 				this.opacity.randomize();
 				this.opacity.update();
 
-				const delay = f.randomIntegerInclusive(settings.opacity.delay.min, settings.opacity.delay.max);
+				const delay = f.randomIntegerInclusive(settings.video.opacity.delay.min, settings.video.opacity.delay.max);
 				setTimeout(this.opacity.cycle, delay);
 			},
 		};
@@ -42,10 +42,10 @@ class Video {
 		this.filter = {
 			randomize : () => {
 				this.filter.value = {
-					brightness : f.randomIntegerInclusive(settings.filter.value.brightness.min, settings.filter.value.brightness.max),
-					contrast   : f.randomIntegerInclusive(settings.filter.value.contrast.min,   settings.filter.value.contrast.max),
-					hueRotate  : f.randomIntegerInclusive(settings.filter.value.hueRotate.min,  settings.filter.value.hueRotate.max),
-					saturate   : f.randomIntegerInclusive(settings.filter.value.saturate.min,   settings.filter.value.saturate.max),
+					brightness : f.randomIntegerInclusive(settings.video.filter.brightness.min, settings.video.filter.brightness.max),
+					contrast   : f.randomIntegerInclusive(settings.video.filter.contrast.min,   settings.video.filter.contrast.max),
+					hueRotate  : f.randomIntegerInclusive(settings.video.filter.hueRotate.min,  settings.video.filter.hueRotate.max),
+					saturate   : f.randomIntegerInclusive(settings.video.filter.saturate.min,   settings.video.filter.saturate.max),
 
 				};
 			},
@@ -64,7 +64,7 @@ class Video {
 				this.filter.randomize();
 				this.filter.update();
 
-				const delay = f.randomIntegerInclusive(settings.filter.delay.min, settings.filter.delay.max);
+				const delay = f.randomIntegerInclusive(settings.video.filter.delay.min, settings.video.filter.delay.max);
 				setTimeout(this.filter.cycle, delay);
 			},
 		};
@@ -100,64 +100,60 @@ const settings = {
 		'30040565_218742602040378_1773007807398805504_n.mp4',
 	],
 
-	zIndex : {
-		value : {
+	video : {
+		zIndex : {
 			min :  0,
 			max : 63,
+
+			delay : {
+				min :  1000,
+				max : 10000,
+			},
 		},
 
-		delay : {
-			min :  1000,
-			max : 10000,
+		blendMode : {
+			list : [
+				'multiply',
+				'screen',
+				'overlay',
+				'darken',
+				'lighten',
+				'color-dodge',
+				'color-burn',
+				'hard-light',
+				'soft-light',
+				'difference',
+				'exclusion',
+				'hue',
+				'saturation',
+				'color',
+				'luminosity',
+			],
+
+			delay : {
+				min :  1000,
+				max : 10000,
+			},
 		},
-	},
 
-	blendMode : {
-		value : [
-			'multiply',
-			'screen',
-			'overlay',
-			'darken',
-			'lighten',
-			'color-dodge',
-			'color-burn',
-			'hard-light',
-			'soft-light',
-			'difference',
-			'exclusion',
-			'hue',
-			'saturation',
-			'color',
-			'luminosity',
-		],
-
-		delay : {
-			min :  1000,
-			max : 10000,
-		},
-	},
-
-	opacity : {
-		value : {
+		opacity : {
 			min :  0,
 			max : 50,
+
+			delay : {
+				min :  1000,
+				max : 10000,
+			},
 		},
 
-		delay : {
-			min :  1000,
-			max : 10000,
-		},
-	},
-
-	filter : {
-		value : {
+		filter : {
 			brightness : {
-				min :    0,
+				min :  100,
 				max : 1000,
 			},
 
 			contrast : {
-				min :    0,
+				min :  100,
 				max : 1000,
 			},
 
@@ -167,14 +163,43 @@ const settings = {
 			},
 
 			saturate : {
-				min :    0,
+				min :  100,
 				max : 1000,
 			},
-		},
 
-		delay : {
-			min :  1000,
-			max : 10000,
+			delay : {
+				min :  1000,
+				max : 10000,
+			},
+		},
+	},
+
+	body : {
+		filter : {
+			brightness : {
+				min :  100,
+				max : 1000,
+			},
+
+			contrast : {
+				min :  100,
+				max : 1000,
+			},
+
+			hueRotate : {
+				min :   0,
+				max : 360,
+			},
+
+			saturate : {
+				min :  100,
+				max : 1000,
+			},
+
+			delay : {
+				min :  1000,
+				max : 10000,
+			},
 		},
 	},
 };
@@ -202,40 +227,39 @@ const f = {
 	},
 };
 
-f.bodyFilter = {
+settings.bodyFilter = {
 	randomize : () => {
-		settings.body.value = {
-			brightness : f.randomIntegerInclusive(settings.filter.value.brightness.min, settings.filter.value.brightness.max),
-			contrast   : f.randomIntegerInclusive(settings.filter.value.contrast.min,   settings.filter.value.contrast.max),
-			hueRotate  : f.randomIntegerInclusive(settings.filter.value.hueRotate.min,  settings.filter.value.hueRotate.max),
-			saturate   : f.randomIntegerInclusive(settings.filter.value.saturate.min,   settings.filter.value.saturate.max),
+		settings.bodyFilter.value = {
+			brightness : f.randomIntegerInclusive(settings.body.filter.brightness.min, settings.body.filter.brightness.max),
+			contrast   : f.randomIntegerInclusive(settings.body.filter.contrast.min,   settings.body.filter.contrast.max),
+			hueRotate  : f.randomIntegerInclusive(settings.body.filter.hueRotate.min,  settings.body.filter.hueRotate.max),
+			saturate   : f.randomIntegerInclusive(settings.body.filter.saturate.min,   settings.body.filter.saturate.max),
 		};
 	},
 
 	update : () => {
-		const brightness = 'brightness(' + settings.body.value.brightness + '%)';
-		const contrast   = 'contrast('   + settings.body.value.contrast   + '%)';
-		const hueRotate  = 'hue-rotate(' + settings.body.value.hueRotate  + 'deg)';
-		const saturate   = 'saturate('   + settings.body.value.saturate   + '%)';
+		const brightness = 'brightness(' + settings.bodyFilter.value.brightness + '%)';
+		const contrast   = 'contrast('   + settings.bodyFilter.value.contrast   + '%)';
+		const hueRotate  = 'hue-rotate(' + settings.bodyFilter.value.hueRotate  + 'deg)';
+		const saturate   = 'saturate('   + settings.bodyFilter.value.saturate   + '%)';
 
 		const filter = f.shuffleArray([brightness, contrast, hueRotate, saturate]).join(' ');
 		document.body.style.filter = filter;
 	},
 
 	cycle : () => {
-		settings.body = {};
-		f.bodyFilter.randomize();
-		f.bodyFilter.update();
+		settings.bodyFilter.randomize();
+		settings.bodyFilter.update();
 
-		const delay = f.randomIntegerInclusive(settings.filter.delay.min, settings.filter.delay.max);
-		setTimeout(f.bodyFilter.cycle, delay);
+		const delay = f.randomIntegerInclusive(settings.body.filter.delay.min, settings.body.filter.delay.max);
+		setTimeout(settings.bodyFilter.cycle, delay);
 	},
 };
 
 f.play = () => {
 	settings.paths.forEach(path => {
 		new Video(path).play();
-		f.bodyFilter.cycle();
+		settings.bodyFilter.cycle();
 	});
 }
 
