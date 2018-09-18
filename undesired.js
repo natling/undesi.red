@@ -46,7 +46,6 @@ class Video {
 					contrast   : f.randomIntegerInclusive(settings.video.filter.contrast.min,   settings.video.filter.contrast.max),
 					hueRotate  : f.randomIntegerInclusive(settings.video.filter.hueRotate.min,  settings.video.filter.hueRotate.max),
 					saturate   : f.randomIntegerInclusive(settings.video.filter.saturate.min,   settings.video.filter.saturate.max),
-
 				};
 			},
 
@@ -72,7 +71,7 @@ class Video {
 
 	play() {
 		this.video = document.createElement('video');
-		document.body.appendChild(this.video);
+		settings.container.appendChild(this.video);
 
 		const source = document.createElement('source');
 		this.video.appendChild(source);
@@ -256,11 +255,55 @@ settings.bodyFilter = {
 	},
 };
 
-f.play = () => {
-	settings.paths.forEach(path => {
-		new Video(path).play();
-		settings.bodyFilter.cycle();
-	});
+settings.cover = {
+	music : document.getElementById('music'),
+	card  : document.getElementById('card'),
+	title : document.getElementById('title'),
+
+	transitionDuration : 12,
+
+	setTransitionDurations : () => {
+		settings.cover.card.style.transitionDuration  = settings.cover.transitionDuration + 's';
+		settings.cover.title.style.transitionDuration = settings.cover.transitionDuration + 's';
+	},
+
+	show : () => {
+		settings.cover.card.style.opacity = 1;
+		settings.cover.title.style.filter = 'blur(0px)';
+		settings.cover.title.style.transitionTimingFunction = 'ease';
+
+		if (settings.playing) {
+			setTimeout(() => {
+				settings.playing = false;
+				settings.cover.title.style.cursor = 'pointer';
+			}, settings.cover.transitionDuration * 1000);
+		}
+	},
+
+	hide : () => {
+		settings.cover.card.style.opacity = 0;
+		settings.cover.title.style.filter = 'blur(16px)';
+		settings.cover.title.style.cursor = 'default';
+		settings.cover.title.style.transitionTimingFunction = 'ease-out';
+	},
+
+	play : () => {
+		if (! settings.playing) {
+			settings.playing = true;
+			settings.cover.hide();
+			settings.cover.music.play();
+			setTimeout(settings.cover.show, (settings.cover.music.duration - settings.cover.transitionDuration) * 1000);
+		}
+	},
+};
+
+f.setup = () => {
+	setTimeout(settings.cover.show, 0);
+	settings.cover.setTransitionDurations();
+	settings.cover.title.onclick = settings.cover.play;
+	settings.bodyFilter.cycle();
+	settings.container = document.getElementById('container');
+	settings.paths.forEach(path => new Video(path).play());
 }
 
-f.play();
+f.setup();
