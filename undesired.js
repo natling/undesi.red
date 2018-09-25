@@ -43,7 +43,7 @@ class Video {
 
 	play() {
 		this.video = document.createElement('video');
-		settings.container.appendChild(this.video);
+		settings.filter.div.appendChild(this.video);
 
 		const source = document.createElement('source');
 		this.video.appendChild(source);
@@ -118,6 +118,30 @@ const settings = {
 		},
 	},
 
+	tint : {
+		hue : {
+			min :   0,
+			max : 360,
+		},
+
+		saturation : 100,
+
+		lightness : {
+			min : 25,
+			max : 75,
+		},
+
+		alpha : {
+			min : 0.5,
+			max : 1,
+		},
+
+		delay : {
+			min :  8000,
+			max : 16000,
+		},
+	},
+
 	filter : {
 		brightness : {
 			min :  100,
@@ -171,8 +195,43 @@ const f = {
 	},
 };
 
+settings.tint = {
+	...settings.tint,
+
+	div : document.getElementById('tint'),
+
+	randomize : () => {
+		settings.tint.value = {
+			hue        : f.randomIntegerInclusive(settings.tint.hue.min,       settings.tint.hue.max),
+			saturation : settings.tint.saturation,
+			lightness  : f.randomIntegerInclusive(settings.tint.lightness.min, settings.tint.lightness.max),
+			alpha      : f.randomFloat(settings.tint.alpha.min,                settings.tint.alpha.max),
+		};
+	},
+
+	update : () => {
+		const hue        = settings.tint.value.hue;
+		const saturation = settings.tint.value.saturation + '%';
+		const lightness  = settings.tint.value.lightness  + '%';
+		const alpha      = settings.tint.value.alpha;
+
+		settings.tint.div.style.background = 'hsla(' + [hue, saturation, lightness, alpha].join(', ') + ')';
+	},
+
+	cycle : () => {
+		settings.tint.randomize();
+		settings.tint.update();
+
+		const delay = f.randomIntegerInclusive(settings.tint.delay.min, settings.tint.delay.max);
+		settings.tint.div.style.transitionDuration = delay / 1000 + 's';
+		setTimeout(settings.tint.cycle, delay);
+	},
+};
+
 settings.filter = {
 	...settings.filter,
+
+	div : document.getElementById('filter'),
 
 	randomize : () => {
 		settings.filter.value = {
@@ -190,7 +249,7 @@ settings.filter = {
 		const saturate   = 'saturate('   + settings.filter.value.saturate   + '%)';
 
 		const filter = f.shuffleArray([brightness, contrast, hueRotate, saturate]).join(' ');
-		settings.container.style.filter = filter;
+		settings.filter.div.style.filter = filter;
 	},
 
 	cycle : () => {
@@ -274,9 +333,9 @@ settings.cover = {
 };
 
 settings.setup = () => {
-	settings.container = document.getElementById('container');
 	settings.videos = settings.paths.map(path => new Video(path));
 	settings.videos.forEach(video => video.play());
+	settings.tint.cycle();
 	settings.filter.cycle();
 
 	setTimeout(settings.cover.show, 0);
