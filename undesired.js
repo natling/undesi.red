@@ -16,13 +16,14 @@ class Video {
 		};
 
 		this.opacity = {
-			randomize : () => this.opacity.value = f.randomIntegerInclusive(settings.video.opacity.min, settings.video.opacity.max),
+			randomize : () => this.opacity.value = f.randomFloat(settings.video.opacity.min, settings.video.opacity.max),
 			update    : () => this.video.style.opacity = this.opacity.value,
 			cycle     : () => {
 				this.opacity.randomize();
 				this.opacity.update();
 
 				const delay = f.randomIntegerInclusive(settings.video.opacity.delay.min, settings.video.opacity.delay.max);
+				this.video.style.transitionDuration = delay / 1000 + 's';
 				setTimeout(this.opacity.cycle, delay);
 			},
 		};
@@ -36,35 +37,6 @@ class Video {
 
 				const delay = f.randomIntegerInclusive(settings.video.blendMode.delay.min, settings.video.blendMode.delay.max);
 				setTimeout(this.blendMode.cycle, delay);
-			},
-		};
-
-		this.filter = {
-			randomize : () => {
-				this.filter.value = {
-					brightness : f.randomIntegerInclusive(settings.video.filter.brightness.min, settings.video.filter.brightness.max),
-					contrast   : f.randomIntegerInclusive(settings.video.filter.contrast.min,   settings.video.filter.contrast.max),
-					hueRotate  : f.randomIntegerInclusive(settings.video.filter.hueRotate.min,  settings.video.filter.hueRotate.max),
-					saturate   : f.randomIntegerInclusive(settings.video.filter.saturate.min,   settings.video.filter.saturate.max),
-				};
-			},
-
-			update : () => {
-				const brightness = 'brightness(' + this.filter.value.brightness + '%)';
-				const contrast   = 'contrast('   + this.filter.value.contrast   + '%)';
-				const hueRotate  = 'hue-rotate(' + this.filter.value.hueRotate  + 'deg)';
-				const saturate   = 'saturate('   + this.filter.value.saturate   + '%)';
-
-				const filter = f.shuffleArray([brightness, contrast, hueRotate, saturate]).join(' ');
-				this.video.style.filter = filter;
-			},
-
-			cycle : () => {
-				this.filter.randomize();
-				this.filter.update();
-
-				const delay = f.randomIntegerInclusive(settings.video.filter.delay.min, settings.video.filter.delay.max);
-				setTimeout(this.filter.cycle, delay);
 			},
 		};
 	}
@@ -101,8 +73,8 @@ const settings = {
 
 	video : {
 		zIndex : {
-			min :  0,
-			max : 63,
+			min : 0,
+			max : 7,
 
 			delay : {
 				min :  8000,
@@ -111,8 +83,8 @@ const settings = {
 		},
 
 		opacity : {
-			min :  0,
-			max : 50,
+			min : 0,
+			max : 0.5,
 
 			delay : {
 				min :  8000,
@@ -144,61 +116,32 @@ const settings = {
 				max : 16000,
 			},
 		},
-
-		filter : {
-			brightness : {
-				min :  100,
-				max : 1000,
-			},
-
-			contrast : {
-				min :  100,
-				max : 1000,
-			},
-
-			hueRotate : {
-				min :   0,
-				max : 360,
-			},
-
-			saturate : {
-				min :  100,
-				max : 1000,
-			},
-
-			delay : {
-				min :  8000,
-				max : 16000,
-			},
-		},
 	},
 
-	body : {
-		filter : {
-			brightness : {
-				min :  100,
-				max : 1000,
-			},
+	filter : {
+		brightness : {
+			min :  100,
+			max : 1000,
+		},
 
-			contrast : {
-				min :  100,
-				max : 1000,
-			},
+		contrast : {
+			min :  100,
+			max : 1000,
+		},
 
-			hueRotate : {
-				min :   0,
-				max : 360,
-			},
+		hueRotate : {
+			min :   0,
+			max : 360,
+		},
 
-			saturate : {
-				min :  100,
-				max : 1000,
-			},
+		saturate : {
+			min :  100,
+			max : 1000,
+		},
 
-			delay : {
-				min :  8000,
-				max : 16000,
-			},
+		delay : {
+			min :  8000,
+			max : 16000,
 		},
 	},
 };
@@ -209,6 +152,8 @@ const f = {
 		max = Math.floor(max);
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	},
+
+	randomFloat : (min, max) => Math.random() * (max - min) + min,
 
 	randomItem : array => {
 		return array[Math.floor(Math.random() * array.length)];
@@ -226,32 +171,34 @@ const f = {
 	},
 };
 
-settings.bodyFilter = {
+settings.filter = {
+	...settings.filter,
+
 	randomize : () => {
-		settings.bodyFilter.value = {
-			brightness : f.randomIntegerInclusive(settings.body.filter.brightness.min, settings.body.filter.brightness.max),
-			contrast   : f.randomIntegerInclusive(settings.body.filter.contrast.min,   settings.body.filter.contrast.max),
-			hueRotate  : f.randomIntegerInclusive(settings.body.filter.hueRotate.min,  settings.body.filter.hueRotate.max),
-			saturate   : f.randomIntegerInclusive(settings.body.filter.saturate.min,   settings.body.filter.saturate.max),
+		settings.filter.value = {
+			brightness : f.randomIntegerInclusive(settings.filter.brightness.min, settings.filter.brightness.max),
+			contrast   : f.randomIntegerInclusive(settings.filter.contrast.min,   settings.filter.contrast.max),
+			hueRotate  : f.randomIntegerInclusive(settings.filter.hueRotate.min,  settings.filter.hueRotate.max),
+			saturate   : f.randomIntegerInclusive(settings.filter.saturate.min,   settings.filter.saturate.max),
 		};
 	},
 
 	update : () => {
-		const brightness = 'brightness(' + settings.bodyFilter.value.brightness + '%)';
-		const contrast   = 'contrast('   + settings.bodyFilter.value.contrast   + '%)';
-		const hueRotate  = 'hue-rotate(' + settings.bodyFilter.value.hueRotate  + 'deg)';
-		const saturate   = 'saturate('   + settings.bodyFilter.value.saturate   + '%)';
+		const brightness = 'brightness(' + settings.filter.value.brightness + '%)';
+		const contrast   = 'contrast('   + settings.filter.value.contrast   + '%)';
+		const hueRotate  = 'hue-rotate(' + settings.filter.value.hueRotate  + 'deg)';
+		const saturate   = 'saturate('   + settings.filter.value.saturate   + '%)';
 
 		const filter = f.shuffleArray([brightness, contrast, hueRotate, saturate]).join(' ');
-		document.body.style.filter = filter;
+		settings.container.style.filter = filter;
 	},
 
 	cycle : () => {
-		settings.bodyFilter.randomize();
-		settings.bodyFilter.update();
+		settings.filter.randomize();
+		settings.filter.update();
 
-		const delay = f.randomIntegerInclusive(settings.body.filter.delay.min, settings.body.filter.delay.max);
-		setTimeout(settings.bodyFilter.cycle, delay);
+		const delay = f.randomIntegerInclusive(settings.filter.delay.min, settings.filter.delay.max);
+		setTimeout(settings.filter.cycle, delay);
 	},
 };
 
@@ -268,42 +215,79 @@ settings.cover = {
 	},
 
 	show : () => {
-		settings.cover.card.style.opacity = 1;
+		settings.cover.card.style.background = 'black';
 		settings.cover.title.style.filter = 'blur(0px)';
 		settings.cover.title.style.transitionTimingFunction = 'ease';
+	},
 
+	hide : () => {
+		settings.cover.card.style.background = 'white';
+		settings.cover.title.style.filter = 'blur(16px)';
+		settings.cover.title.style.transitionTimingFunction = 'ease-out';
+		settings.cover.title.style.cursor = 'default';
+	},
+
+	fade : (volume, duration) => {
+		clearTimeout(settings.timer);
+		duration /= 100;
+		const step = (volume - settings.cover.music.volume) / duration;
+
+		const adjust = () => {
+			if (Math.abs(volume - settings.cover.music.volume) > Math.abs(step)) {
+				settings.cover.music.volume += step;
+				settings.timer = setTimeout(adjust, duration);
+			} else {
+				settings.cover.music.volume = volume;
+			}
+		}
+
+		adjust();
+	},
+
+	play : () => {
+		if (! settings.playing) {
+			if (settings.cover.music.paused) {
+				settings.cover.music.volume = 0;
+				settings.cover.music.play();
+			}
+
+			settings.playing = true;
+			settings.cover.hide();
+			settings.cover.music.currentTime = 0;
+			settings.cover.fade(1, settings.cover.transitionDuration * 1000);
+
+			setTimeout(settings.cover.stop, (settings.cover.music.duration - settings.cover.transitionDuration) * 1000);
+		}
+	},
+
+	stop : () => {
 		if (settings.playing) {
+			settings.cover.show();
+			settings.cover.fade(0, settings.cover.transitionDuration * 1000);
+
 			setTimeout(() => {
 				settings.playing = false;
 				settings.cover.title.style.cursor = 'pointer';
 			}, settings.cover.transitionDuration * 1000);
 		}
 	},
-
-	hide : () => {
-		settings.cover.card.style.opacity = 0;
-		settings.cover.title.style.filter = 'blur(16px)';
-		settings.cover.title.style.cursor = 'default';
-		settings.cover.title.style.transitionTimingFunction = 'ease-out';
-	},
-
-	play : () => {
-		if (! settings.playing) {
-			settings.playing = true;
-			settings.cover.hide();
-			settings.cover.music.play();
-			setTimeout(settings.cover.show, (settings.cover.music.duration - settings.cover.transitionDuration) * 1000);
-		}
-	},
 };
 
-f.setup = () => {
+settings.setup = () => {
+	settings.container = document.getElementById('container');
+	settings.videos = settings.paths.map(path => new Video(path));
+	settings.videos.forEach(video => video.play());
+	settings.filter.cycle();
+
 	setTimeout(settings.cover.show, 0);
 	settings.cover.setTransitionDurations();
 	settings.cover.title.onclick = settings.cover.play;
-	settings.bodyFilter.cycle();
-	settings.container = document.getElementById('container');
-	settings.paths.forEach(path => new Video(path).play());
+
+	document.onkeydown = event => {
+		if (event.key == 'Escape') {
+			settings.cover.stop();
+		}
+	};
 }
 
-f.setup();
+settings.setup();
