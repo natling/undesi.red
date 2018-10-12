@@ -4,25 +4,25 @@ class Video {
 		this.source = source;
 
 		this.zIndex = {
-			randomize : () => this.zIndex.value = f.randomIntegerInclusive(settings.video.zIndex.min, settings.video.zIndex.max),
+			randomize : () => this.zIndex.value = f.randomIntegerInRange(settings.video.zIndex),
 			update    : () => this.video.style.zIndex = this.zIndex.value,
 			cycle     : () => {
 				this.zIndex.randomize();
 				this.zIndex.update();
 
-				const delay = f.randomIntegerInclusive(settings.video.zIndex.delay.min, settings.video.zIndex.delay.max);
+				const delay = f.randomIntegerInRange(settings.video.zIndex.delay);
 				setTimeout(this.zIndex.cycle, delay);
 			},
 		};
 
 		this.opacity = {
-			randomize : () => this.opacity.value = f.randomFloat(settings.video.opacity.min, settings.video.opacity.max),
+			randomize : () => this.opacity.value = f.randomFloatInRange(settings.video.opacity),
 			update    : () => this.video.style.opacity = this.opacity.value,
 			cycle     : () => {
 				this.opacity.randomize();
 				this.opacity.update();
 
-				const delay = f.randomIntegerInclusive(settings.video.opacity.delay.min, settings.video.opacity.delay.max);
+				const delay = f.randomIntegerInRange(settings.video.opacity.delay);
 				this.video.style.transitionDuration = delay / 1000 + 's';
 				setTimeout(this.opacity.cycle, delay);
 			},
@@ -35,7 +35,7 @@ class Video {
 				this.blendMode.randomize();
 				this.blendMode.update();
 
-				const delay = f.randomIntegerInclusive(settings.video.blendMode.delay.min, settings.video.blendMode.delay.max);
+				const delay = f.randomIntegerInRange(settings.video.blendMode.delay);
 				setTimeout(this.blendMode.cycle, delay);
 			},
 		};
@@ -179,6 +179,9 @@ const f = {
 
 	randomFloat : (min, max) => Math.random() * (max - min) + min,
 
+	randomIntegerInRange : range => f.randomIntegerInclusive(range.min, range.max),
+	randomFloatInRange   : range => f.randomFloat(range.min, range.max),
+
 	randomItem : array => {
 		return array[Math.floor(Math.random() * array.length)];
 	},
@@ -202,10 +205,10 @@ settings.tint = {
 
 	randomize : () => {
 		settings.tint.value = {
-			hue        : f.randomIntegerInclusive(settings.tint.hue.min,       settings.tint.hue.max),
+			hue        : f.randomIntegerInRange(settings.tint.hue),
 			saturation : settings.tint.saturation,
-			lightness  : f.randomIntegerInclusive(settings.tint.lightness.min, settings.tint.lightness.max),
-			alpha      : f.randomFloat(settings.tint.alpha.min,                settings.tint.alpha.max),
+			lightness  : f.randomIntegerInRange(settings.tint.lightness),
+			alpha      : f.randomFloatInRange(settings.tint.alpha),
 		};
 	},
 
@@ -222,7 +225,7 @@ settings.tint = {
 		settings.tint.randomize();
 		settings.tint.update();
 
-		const delay = f.randomIntegerInclusive(settings.tint.delay.min, settings.tint.delay.max);
+		const delay = f.randomIntegerInRange(settings.tint.delay);
 		settings.tint.div.style.transitionDuration = delay / 1000 + 's';
 		setTimeout(settings.tint.cycle, delay);
 	},
@@ -235,10 +238,10 @@ settings.filter = {
 
 	randomize : () => {
 		settings.filter.value = {
-			brightness : f.randomIntegerInclusive(settings.filter.brightness.min, settings.filter.brightness.max),
-			contrast   : f.randomIntegerInclusive(settings.filter.contrast.min,   settings.filter.contrast.max),
-			hueRotate  : f.randomIntegerInclusive(settings.filter.hueRotate.min,  settings.filter.hueRotate.max),
-			saturate   : f.randomIntegerInclusive(settings.filter.saturate.min,   settings.filter.saturate.max),
+			brightness : f.randomIntegerInRange(settings.filter.brightness),
+			contrast   : f.randomIntegerInRange(settings.filter.contrast),
+			hueRotate  : f.randomIntegerInRange(settings.filter.hueRotate),
+			saturate   : f.randomIntegerInRange(settings.filter.saturate),
 		};
 	},
 
@@ -256,7 +259,7 @@ settings.filter = {
 		settings.filter.randomize();
 		settings.filter.update();
 
-		const delay = f.randomIntegerInclusive(settings.filter.delay.min, settings.filter.delay.max);
+		const delay = f.randomIntegerInRange(settings.filter.delay);
 		setTimeout(settings.filter.cycle, delay);
 	},
 };
