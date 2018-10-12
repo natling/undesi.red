@@ -182,9 +182,7 @@ const f = {
 	randomIntegerInRange : range => f.randomIntegerInclusive(range.min, range.max),
 	randomFloatInRange   : range => f.randomFloat(range.min, range.max),
 
-	randomItem : array => {
-		return array[Math.floor(Math.random() * array.length)];
-	},
+	randomItem : array => array[Math.floor(Math.random() * array.length)],
 
 	shuffleArray : array => {
 		for (let i = array.length - 1; i > 0; i--) {
