@@ -4,7 +4,7 @@
 	src:
 		local('Gotham'),
 		local('Gotham Regular'),
-		url('gotham.otf') format('opentype');
+		url('files/gotham.otf') format('opentype');
 }
 
 #card {
