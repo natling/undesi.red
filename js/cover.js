@@ -67,18 +67,18 @@ settings.cover = {
 			}, settings.cover.transitionDuration * 1000);
 		}
 	},
+
+	setup : () => {
+		setTimeout(settings.cover.show, 0);
+		settings.cover.setTransitionDurations();
+		settings.cover.title.onclick = settings.cover.play;
+
+		document.onkeydown = event => {
+			if (event.key == 'Escape') {
+				settings.cover.stop();
+			}
+		};
+	},
 };
-
-settings.cover.setup = () => {
-	setTimeout(settings.cover.show, 0);
-	settings.cover.setTransitionDurations();
-	settings.cover.title.onclick = settings.cover.play;
-
-	document.onkeydown = event => {
-		if (event.key == 'Escape') {
-			settings.cover.stop();
-		}
-	};
-}
 
 settings.cover.setup();
